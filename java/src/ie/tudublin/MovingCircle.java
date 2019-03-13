@@ -29,7 +29,6 @@ public class MovingCircle
         // Static field
         ui.textAlign(PApplet.CENTER, PApplet.CENTER);
         ui.text("I am a moving circle", x, y);
-
     }
 
     public void update()

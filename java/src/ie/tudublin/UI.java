@@ -4,8 +4,11 @@ import processing.core.PApplet;
 
 public class UI extends PApplet
 {
+    private float DUnit = 100.00f;
+
     Button b;
     MovingCircle mc;
+    Radar rd;
 
     boolean[] keys = new boolean[1024];
 
@@ -29,13 +32,14 @@ public class UI extends PApplet
     {
         size(800, 800);
         // Use fullscreen instead of size to make your interface fullscreen
-        //fullScreen(); 
+        // fullScreen(); 
     }
 
     public void setup()
     {
         b = new Button(this, 50, 50, 100, 50, "I am a button");
         mc = new MovingCircle(this, width / 2, height / 2, 50);
+        rd = new Radar(this, width/2, height/2, DUnit);
     }
 
     public void draw()
@@ -43,8 +47,11 @@ public class UI extends PApplet
         background(0);
         b.render();
 
-        mc.update();
-        mc.render();
+        // mc.update();
+        // mc.render();
+
+        rd.update();
+        rd.render();
 
         if (checkKey(LEFT))
         {
