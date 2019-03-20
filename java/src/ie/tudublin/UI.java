@@ -4,11 +4,14 @@ import processing.core.PApplet;
 
 public class UI extends PApplet
 {
-    private float DUnit = 100.00f;
+    private float DUnit;
+    private float centerX;
+    private float centerY;
 
     Button b;
     MovingCircle mc;
     Radar rd;
+    AudioWave aw;
 
     boolean[] keys = new boolean[1024];
 
@@ -30,25 +33,47 @@ public class UI extends PApplet
 
     public void settings()
     {
-        size(800, 800);
+        
+        // size(800, 800);
         // Use fullscreen instead of size to make your interface fullscreen
-        // fullScreen(); 
+        fullScreen(); 
     }
 
     public void setup()
     {
+        // set a colormode
+        colorMode(HSB);
+        smooth();
+
+        // set screen center
+        centerX = width/2.0f;
+        centerY = height/2.0f;
+
+        // set normal unit circle diameter
+        DUnit = (height + width) / 16;
+
+        // instantiate objects
+        instatiate();
+    }
+
+    public void instatiate()
+    {
         b = new Button(this, 50, 50, 100, 50, "I am a button");
-        mc = new MovingCircle(this, width / 2, height / 2, 50);
-        rd = new Radar(this, width/2, height/2, DUnit);
+        mc = new MovingCircle(this, centerX, centerY, DUnit*2);
+        rd = new Radar(this, centerX/2, centerY/2, DUnit);
+        aw = new AudioWave(this);
     }
 
     public void draw()
     {
         background(0);
-        b.render();
+        aw.update();
+
+        //b.render();
 
         // mc.update();
         // mc.render();
+        
 
         rd.update();
         rd.render();
@@ -56,6 +81,7 @@ public class UI extends PApplet
         if (checkKey(LEFT))
         {
             System.out.println("Left arrow key pressed");
+            System.out.println(centerX + " vs " + width/2);
         }
     }
 }
