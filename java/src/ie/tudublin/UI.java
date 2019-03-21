@@ -43,7 +43,7 @@ public class UI extends PApplet
     {
         b = new Button(this, 50, 50, 100, 50, "I am a button");
         mc = new MovingCircle(this, centerX, centerY, DUnit*2);
-        rd = new Radar(this, centerX/2, centerY/2, DUnit);
+        rd = new Radar(this, centerX, centerY, DUnit);
         aw = new AudioWave(this);
 
         for (int i = 0; i < stars.length; i++)
@@ -55,7 +55,7 @@ public class UI extends PApplet
     public void draw()
     {
         background(0);
-        aw.update();
+        // aw.update();
 
         //b.render();
 
@@ -63,8 +63,8 @@ public class UI extends PApplet
         // mc.render();
         
 
-        // rd.update();
-        // rd.render();
+        rd.update();
+        rd.render();
 
         for (int i = 0; i < stars.length; i++)
         {    
