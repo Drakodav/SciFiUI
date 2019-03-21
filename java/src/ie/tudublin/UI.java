@@ -12,6 +12,7 @@ public class UI extends PApplet
     MovingCircle mc;
     Radar rd;
     AudioWave aw;
+    Stars[] stars = new Stars[1000];
 
     boolean[] keys = new boolean[1024];
 
@@ -42,7 +43,7 @@ public class UI extends PApplet
     public void setup()
     {
         // set a colormode
-        colorMode(HSB);
+        colorMode(HSB, 255, 255, 255);
         smooth();
 
         // set screen center
@@ -62,6 +63,11 @@ public class UI extends PApplet
         mc = new MovingCircle(this, centerX, centerY, DUnit*2);
         rd = new Radar(this, centerX/2, centerY/2, DUnit);
         aw = new AudioWave(this);
+
+        for (int i = 0; i < stars.length; i++)
+        {
+            stars[i] = new Stars(this, DUnit);
+        }
     }
 
     public void draw()
@@ -75,8 +81,14 @@ public class UI extends PApplet
         // mc.render();
         
 
-        rd.update();
-        rd.render();
+        // rd.update();
+        // rd.render();
+
+        for (int i = 0; i < stars.length; i++)
+        {    
+            stars[i].render();
+            stars[i].update();
+        }
 
         if (checkKey(LEFT))
         {
