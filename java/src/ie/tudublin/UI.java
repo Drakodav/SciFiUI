@@ -14,24 +14,6 @@ public class UI extends PApplet
     AudioWave aw;
     Stars[] stars = new Stars[1000];
 
-    boolean[] keys = new boolean[1024];
-
-    public void keyPressed()
-    {
-        keys[keyCode] = true;
-    }
-    
-    public void keyReleased()
-    {
-        keys[keyCode] = true;
-    }
-
-    public boolean checkKey(int c)
-    {
-        return keys[c] || keys [Character.toUpperCase(c)];
-    }
-    
-
     public void settings()
     {
         
@@ -96,5 +78,26 @@ public class UI extends PApplet
             System.out.println(centerX + " vs " + width/2);
         }
     }
+
+
+
+    
+    boolean[] keys = new boolean[1024];
+
+    public void keyPressed()
+    {
+        keys[keyCode] = true;
+    }
+    
+    public void keyReleased()
+    {
+        keys[keyCode] = true;
+    }
+
+    public boolean checkKey(int c)
+    {
+        return keys[c] || keys [Character.toUpperCase(c)];
+    }
+    
 }
 
