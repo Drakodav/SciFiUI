@@ -37,11 +37,8 @@ public class UI extends PApplet
         
         // size(800, 800);
         // Use fullscreen instead of size to make your interface fullscreen
-<<<<<<< HEAD
         fullScreen(); 
-=======
-        //fullScreen(P3D); 
->>>>>>> 8f5fee54af6d6253030d429f4765a4e9bfe12053
+        // fullScreen(P3D); 
     }
 
     public void setup()
@@ -63,20 +60,18 @@ public class UI extends PApplet
 
     public void instatiate()
     {
-        b = new Button(this, 50, 50, 100, 50, "I am a button");
-<<<<<<< HEAD
-        mc = new MovingCircle(this, centerX, centerY, DUnit*2);
-        rd = new Radar(this, centerX/2, centerY/2, DUnit);
-        aw = new AudioWave(this);
+        // b = new Button(this, 50, 50, 100, 50, "I am a button");
+        // mc = new MovingCircle(this, centerX, centerY, DUnit*2);
+        // rd = new Radar(this, 2, centerX/2, centerY/2, DUnit);
+        // aw = new AudioWave(this);
 
-        for (int i = 0; i < stars.length; i++)
-        {
-            stars[i] = new Stars(this, DUnit);
-        }
-=======
+        // for (int i = 0; i < stars.length; i++)
+        // {
+        //     stars[i] = new Stars(this, DUnit);
+        // }
+
         mc = new MovingCircle(this, width / 2, height * .75f, 50);
         radar = new Radar(this, 1, width / 2, height / 2, 100);
->>>>>>> 8f5fee54af6d6253030d429f4765a4e9bfe12053
     }
 
     Radar radar;
@@ -84,7 +79,7 @@ public class UI extends PApplet
     public void draw()
     {
         background(0);
-        aw.update();
+        // aw.update();
 
         //b.render();
 
@@ -95,12 +90,12 @@ public class UI extends PApplet
         // rd.update();
         // rd.render();
 
-        for (int i = 0; i < stars.length; i++)
-        {    
-            stars[i].render();
-            stars[i].update();
-        }
-
+        // for (int i = 0; i < stars.length; i++)
+        // {    
+        //     stars[i].render();
+        //     stars[i].update();
+        // }
+        
         radar.update();
         radar.render();
 
