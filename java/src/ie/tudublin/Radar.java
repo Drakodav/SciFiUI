@@ -30,9 +30,9 @@ public class Radar
         ui.rotate(rotation);
         
         ui.ellipse(0, 0, diameter, diameter);
-        ui.stroke(ui.frameCount%255+200, ui.frameCount%255+200, 255);
         ui.line(0, 0, radius, 0);
         for (int i = 0; i < 300; i+=4) {
+            ui.stroke(ui.frameCount%255+200, 200, 255);
             ui.line(0, 0, radius, (float) (-i*Math.cos(radius)));
         }
         ui.popMatrix();
