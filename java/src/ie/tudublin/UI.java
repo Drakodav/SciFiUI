@@ -38,7 +38,7 @@ public class UI extends PApplet
         // instantiate objects
         instatiate();
     }
-
+    
     public void instatiate()
     {
         b = new Button(this, 50, 50, 100, 50, "I am a button");
@@ -100,8 +100,8 @@ public class UI extends PApplet
         {
             for (int i = 0; i < stars.length; i++)
             {
-                stars[i].x -= (float) (( Math.cos(i*width)*8)*8 %Math.cos(width));
-                stars[i].y -= (float) (( Math.sin(i*height)*8)*8 %Math.sin(height));
+                stars[i].x -= (float) (( Math.cos(i*width)*8) %Math.cos(width)) *8;
+                stars[i].y -= (float) (( Math.sin(i*height)*8) %Math.sin(height)) *8;
             }
         }
         if (checkKey('s'))
