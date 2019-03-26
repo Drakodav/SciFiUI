@@ -38,13 +38,13 @@ public class AudioWave
                     , ui.map(i, 0, ai.bufferSize(), 0, ui.width)
                     , middle + ai.left.get(i) * middle);
         }
-        fft.forward(ai.left);
+        // fft.forward(ai.left);
 
-        for(int i = 0 ; i < fft.specSize() ; i ++)
-        {
-            ui.stroke(ui.map(i, 0, ai.bufferSize(), 0, 255), 255, 255);            
-            ui.ellipse(i, middle/2, i, fft.getBand(i) * 20);
-        }
+        // for(int i = 0 ; i < fft.specSize() ; i ++)
+        // {
+        //     ui.stroke(ui.map(i, 0, ai.bufferSize(), 0, 255), 255, 255);            
+        //     ui.ellipse(i, middle/2, i, fft.getBand(i) * 20);
+        // }
     }
 
 }

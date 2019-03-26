@@ -40,7 +40,7 @@ public class Radar
     public void update()
     {
         rotation += 0.03f;
-        diameter += Math.sin(rotation)*10;
+        diameter += Math.sin(rotation*3)*2.5;
         radius = diameter/2;
     }
 

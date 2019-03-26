@@ -54,7 +54,7 @@ public class UI extends PApplet
     public void draw()
     {
         background(0);
-        // aw.update();
+        aw.update();
 
         //b.render();
 
@@ -84,8 +84,32 @@ public class UI extends PApplet
         {
             for (int i = 0; i < stars.length; i++)
             {
-                stars[i].x += (float) (Math.random() * Math.cos(i)) *4;
-                stars[i].y += (float) (Math.random() * Math.sin(i)) *4;
+                stars[i].x += (float) (Math.cos(i)) *4;
+                stars[i].y += (float) (Math.sin(i)) *4;
+            }
+        }
+        if (checkKey('x'))
+        {
+            for (int i = 0; i < stars.length; i++)
+            {
+                stars[i].x -= (float) (Math.cos(i)) *4;
+                stars[i].y -= (float) (Math.sin(i)) *4;
+            }
+        }
+        if (checkKey('a'))
+        {
+            for (int i = 0; i < stars.length; i++)
+            {
+                stars[i].x -= (float) (( Math.cos(i*width)*8)*8 %Math.cos(width));
+                stars[i].y -= (float) (( Math.sin(i*height)*8)*8 %Math.sin(height));
+            }
+        }
+        if (checkKey('s'))
+        {
+            for (int i = 0; i < stars.length; i++)
+            {
+                stars[i].x += (float) (( Math.cos(i*width)*8) );//%Math.cos(width));
+                stars[i].y += (float) (( Math.sin(i*height)*8) );//%Math.sin(height));
             }
         }
 
