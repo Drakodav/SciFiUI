@@ -4,8 +4,8 @@ public class Stars
 {
     UI ui;
     private float unit;
-    private float x;
-    private float y;
+    public float x;
+    public float y;
 
     public Stars(UI ui, float unit)
     {

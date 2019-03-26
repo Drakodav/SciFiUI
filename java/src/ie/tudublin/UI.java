@@ -51,7 +51,6 @@ public class UI extends PApplet
             stars[i] = new Stars(this, DUnit);
         }
     }
-
     public void draw()
     {
         background(0);
@@ -72,14 +71,30 @@ public class UI extends PApplet
             stars[i].update();
         }
 
+        if (checkKey(' ')) 
+        {
+            for (int i = 0; i < stars.length; i++)
+            {
+                stars[i].x = rd.x + (rd.radius * (float) Math.sin(i));
+                stars[i].y = rd.y + (rd.radius * (float) Math.cos(i));
+            }  
+        }
+        
+        if (checkKey('z'))
+        {
+            for (int i = 0; i < stars.length; i++)
+            {
+                stars[i].x += (float) (Math.random() * Math.cos(i)) *4;
+                stars[i].y += (float) (Math.random() * Math.sin(i)) *4;
+            }
+        }
+
         if (checkKey(LEFT))
         {
             System.out.println("Left arrow key pressed");
             System.out.println(centerX + " vs " + width/2);
         }
     }
-
-
 
     
     boolean[] keys = new boolean[1024];
@@ -91,7 +106,7 @@ public class UI extends PApplet
     
     public void keyReleased()
     {
-        keys[keyCode] = true;
+        keys[keyCode] = false;
     }
 
     public boolean checkKey(int c)

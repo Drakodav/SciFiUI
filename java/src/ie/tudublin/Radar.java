@@ -4,10 +4,10 @@ package ie.tudublin;
 
 public class Radar
 {
-    private float x;
-    private float y;
-    private float diameter;
-    private float radius;
+    public float x;
+    public float y;
+    public float diameter;
+    public float radius;
     private float rotation;
     UI ui;
 
@@ -30,17 +30,18 @@ public class Radar
         ui.rotate(rotation);
         
         ui.ellipse(0, 0, diameter, diameter);
-        ui.line(0, 0, radius, 0);
-        for (int i = 0; i < 300; i+=4) {
-            ui.stroke(ui.frameCount%255+200, 200, 255);
-            ui.line(0, 0, radius, (float) (-i*Math.cos(radius)));
+        for (int i = 0; i < 100; i++) {
+            ui.stroke(255, ui.frameCount%100+155, 255);
+            ui.line(0, 0, (float) (radius*Math.sin(i*0.001)), (float) (radius*Math.cos(i*0.001)));
         }
         ui.popMatrix();
     }
 
     public void update()
     {
-        rotation += 0.01f;
+        rotation += 0.03f;
+        diameter += Math.sin(rotation)*10;
+        radius = diameter/2;
     }
 
 }
