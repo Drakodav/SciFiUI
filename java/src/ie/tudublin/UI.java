@@ -71,6 +71,7 @@ public class UI extends PApplet
             stars[i].update();
         }
 
+        // control for stars[]
         if (checkKey(' ')) 
         {
             for (int i = 0; i < stars.length; i++)
@@ -79,7 +80,6 @@ public class UI extends PApplet
                 stars[i].y = rd.y + (rd.radius * (float) Math.cos(i));
             }  
         }
-        
         if (checkKey('z'))
         {
             for (int i = 0; i < stars.length; i++)
@@ -108,8 +108,16 @@ public class UI extends PApplet
         {
             for (int i = 0; i < stars.length; i++)
             {
-                stars[i].x += (float) (( Math.cos(i*width)*8) );//%Math.cos(width));
-                stars[i].y += (float) (( Math.sin(i*height)*8) );//%Math.sin(height));
+                stars[i].x += (float) (( Math.cos(i*width)*8) );//%Math.cos(width);
+                stars[i].y += (float) (( Math.sin(i*height)*8) );//Math.sin(height);
+            }
+        }
+        if (checkKey('l'))
+        {
+            for (int i = 0; i < stars.length; i++)
+            {
+                stars[i].x = (float) (map(i, 0, stars.length, 0, width));
+                stars[i].y = height/2;
             }
         }
 
