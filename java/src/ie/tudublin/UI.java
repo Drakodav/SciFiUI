@@ -1,5 +1,6 @@
 package ie.tudublin;
 
+import java.util.ArrayList;
 import processing.core.PApplet;
 
 public class UI extends PApplet
@@ -7,19 +8,21 @@ public class UI extends PApplet
     private float DUnit;
     private float centerX;
     private float centerY;
+    private int lots;
 
     Button b;
     MovingCircle mc;
     Radar rd;
     AudioWave aw;
-    Stars[] stars = new Stars[1000];
+    public  ArrayList<Star> stars = new  ArrayList<Star>();
 
     public void settings()
     {
         
         // size(800, 800);
         // Use fullscreen instead of size to make your interface fullscreen
-        fullScreen(P3D,SPAN); 
+        // fullScreen(P3D,SPAN); 
+        fullScreen();
     }
 
     public void setup()
@@ -34,6 +37,7 @@ public class UI extends PApplet
 
         // set normal unit circle diameter
         DUnit = (height + width) / 16;
+        lots = 1000;
 
         // instantiate objects
         instatiate();
@@ -46,9 +50,9 @@ public class UI extends PApplet
         rd = new Radar(this, centerX, centerY, DUnit);
         aw = new AudioWave(this);
 
-        for (int i = 0; i < stars.length; i++)
+        for (int i = 0; i < lots; i++)
         {
-            stars[i] = new Stars(this, DUnit);
+            stars.add(new Star(this, DUnit));
         }
     }
     public void draw()
@@ -65,61 +69,14 @@ public class UI extends PApplet
         rd.update();
         rd.render();
 
-        for (int i = 0; i < stars.length; i++)
-        {    
-            stars[i].render();
-            stars[i].update();
-        }
-
-        // control for stars[]
-        if (checkKey(' ')) 
+        for(int i= stars.size() - 1 ;   i >= 0 ;    i--)
         {
-            for (int i = 0; i < stars.length; i++)
-            {
-                stars[i].x = rd.x + (rd.radius * (float) Math.sin(i));
-                stars[i].y = rd.y + (rd.radius * (float) Math.cos(i));
-            }  
+            Star s = stars.get(i);
+            s.render();
+            s.update();
         }
-        if (checkKey('z'))
-        {
-            for (int i = 0; i < stars.length; i++)
-            {
-                stars[i].x += (float) (Math.cos(i)) *4;
-                stars[i].y += (float) (Math.sin(i)) *4;
-            }
-        }
-        if (checkKey('x'))
-        {
-            for (int i = 0; i < stars.length; i++)
-            {
-                stars[i].x -= (float) (Math.cos(i)) *4;
-                stars[i].y -= (float) (Math.sin(i)) *4;
-            }
-        }
-        if (checkKey('a'))
-        {
-            for (int i = 0; i < stars.length; i++)
-            {
-                stars[i].x -= (float) (( Math.cos(i*width)*8) %Math.cos(width)) *8;
-                stars[i].y -= (float) (( Math.sin(i*height)*8) %Math.sin(height)) *8;
-            }
-        }
-        if (checkKey('s'))
-        {
-            for (int i = 0; i < stars.length; i++)
-            {
-                stars[i].x += (float) (( Math.cos(i*width)*8) );//%Math.cos(width);
-                stars[i].y += (float) (( Math.sin(i*height)*8) );//Math.sin(height);
-            }
-        }
-        if (checkKey('l'))
-        {
-            for (int i = 0; i < stars.length; i++)
-            {
-                stars[i].x = (float) (map(i, 0, stars.length, 0, width));
-                stars[i].y = height/2;
-            }
-        }
+            
+        
 
         if (checkKey(LEFT))
         {
