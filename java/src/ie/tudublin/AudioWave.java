@@ -43,6 +43,7 @@ public class AudioWave
     {
         // ui.stroke(255);
         radarBeat();
+        radarBeatLeft();
 
         float middle = height / 5 * 4;
 
@@ -62,6 +63,18 @@ public class AudioWave
 
     }
 
+    public void radarBeatLeft()
+    {
+        for (Star s : ui.sLeft) {
+            s.update();
+            s.render();
+            // if(ui.frameCount%50==0 && beat.isOnset()) s.gotoLine();
+            if(fft.getBand(2) > 100 && fft.getBand(2) < 150) s.gotoLine();
+            if(fft.getBand(2) > 200 && fft.getBand(2) < 300)s.gotoCircleInverse();
+            s.gotoCircle();
+        }
+    }
+
     public void radarBeat()
     {
         beat.detect(song.right);
@@ -76,11 +89,13 @@ public class AudioWave
         }
         if ( !beat.isOnset()) 
         {
-            for(int i= ui.stars.size() - 1 ;   i >= 0 ;    i--)
+            for(int i= ui.stars.size() - 1 ;   i > 0 ;    i--)
             {
                 Star s = ui.stars.get(i);
+                s.update();
                 if(i%2==0) s.twistRight();
                 if(i%2==1) s.twistLeft();
+              
             }
             ui.rd.diameter = rdDiameter;
         }

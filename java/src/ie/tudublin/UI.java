@@ -17,6 +17,7 @@ public class UI extends PApplet
     Radar rdLeft;
     AudioWave aw;
     public  ArrayList<Star> stars = new  ArrayList<Star>();
+    public  ArrayList<Star> sLeft = new  ArrayList<Star>();
     public  ArrayList<Star> sBackground = new  ArrayList<Star>();
 
     public void settings() {
@@ -34,7 +35,6 @@ public class UI extends PApplet
         // set screen center
         centerX = width/2.0f;
         centerY = height/2.0f;
-
         // set normal unit circle diameter
         DUnit = (height + width) / 16;
         lots = 1000;
@@ -52,12 +52,15 @@ public class UI extends PApplet
         aw = new AudioWave(this);
 
         for (int i = 0; i < lots; i++) {
-            stars.add(new Star(this, DUnit));
+            stars.add(new Star(this, DUnit, "stars"));
         }
-
         for (int i = 0; i < lots/2; i++) {
-            sBackground.add(new Star(this, DUnit/2));
+            sLeft.add(new Star(this, DUnit/2, "sLeft"));
         }
+        for (int i = 0; i < lots; i++) {
+            sBackground.add(new Star(this, DUnit/2, " "));
+        }
+        
     }
 
     Radar radar;
@@ -65,7 +68,7 @@ public class UI extends PApplet
     public void draw()
     {
         background(0);
-        // aw.update();
+        aw.update();
 
         //b.render();
 
@@ -83,15 +86,14 @@ public class UI extends PApplet
             s.update();
             s.render();
         }
-
-        // for (Star s : sBackground) {
-        //     s.update();
-        //     s.render();
-        // }
-
-
-            
-        
+        for (Star s : sLeft) {
+            s.update();
+            s.render();
+        }
+        for (Star s : sBackground) {
+            s.update();
+            s.render();
+        }
 
         if (checkKey(LEFT))
         {
@@ -125,9 +127,6 @@ public class UI extends PApplet
             return false;
     }
 
-	public void millis(int i) {
-	}
- 
     public void mouseDragged()
     {
         rd.mouseDragged();

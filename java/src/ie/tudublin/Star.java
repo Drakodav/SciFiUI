@@ -17,14 +17,18 @@ public class Star extends ArtForms
     private float rdX;
     private float rdY;
     private float rdRadius;
+    private String name;
+    private int i;
+    private Star s;
 
-    public Star(UI ui, float unit)
+    public Star(UI ui, float unit, String name)
     {
         super(ui, unit);
 
         width = ui.width;
         height = ui.height;
-        
+        this.name = name;
+ 
         // set star location to spawn in a random location
         x = (float) (Math.random() * (ui.width - 0) + 1);
         y = (float) (Math.random() * (ui.height - 0)+ 1);
@@ -60,8 +64,8 @@ public class Star extends ArtForms
 
     public void update()
     {
+        nameCheck();
         randomMovement();
-        keyMovement();
         
         speed = (float) (Math.random() * (30) + 1);
         // speed = 10;
@@ -74,13 +78,14 @@ public class Star extends ArtForms
         if (y <= 0 || y >= height)
         {
             dy *= -1;            
-        }
+        }        
     }
 
     public void keyMovement()
     {
         if (ui.checkKey('l')) gotoLine();
         if (ui.checkKey('k')) gotoCircle();
+        if (ui.checkKey('j')) gotoCircleInverse();
         if (ui.checkKey('z')) twistLeft();
         if (ui.checkKey('x')) twistRight();
         if (ui.checkKey('a')) maxIn();
@@ -100,7 +105,6 @@ public class Star extends ArtForms
         // s.x = (float) (ui.map(i, 0, ui.stars.size(), 0, width));
         // s.y = height/2;
 
-        int i = ui.stars.indexOf(this);
         v2 = new PVector( ((float) (UI.map(i, 0, ui.stars.size(), 0, width))) , (height/2) );
         v1 = new PVector(x, y);
         v2.sub(v1);
@@ -110,18 +114,7 @@ public class Star extends ArtForms
     // code below makes an eye shape
     // v2 = new PVector( (rdX + (rdRadius * (float) Math.cos(i))), (rdY + (rdRadius * (float) Math.sin(i))) ) ;
     public void gotoCircle()
-    {
-        // int i = ui.stars.indexOf(this);
-        // Star s = ui.stars.get(i);
-        // s.x = ui.rd.x + (ui.rd.radius * (float) Math.sin(i));
-        // s.y = ui.rd.y + (ui.rd.radius * (float) Math.cos(i));
-        
-        rdX = ui.rd.x;
-        rdY = ui.rd.y;
-        rdRadius = ui.rd.radius;
-        
-        int i = ui.stars.indexOf(this);
-        // Star s = ui.stars.get(i);
+    {                
         v2 = new PVector( (rdX + (rdRadius * (float) Math.sin(i))), (rdY + (rdRadius * (float) Math.cos(i))) ) ;
         v1 = new PVector(x, y);
         v2.sub(v1);
@@ -131,48 +124,66 @@ public class Star extends ArtForms
 
     public void twistLeft()
     {
-        int i = ui.stars.indexOf(this);
-        Star s = ui.stars.get(i);
         s.x += (float) (Math.cos(i)) *4 *dx;
         s.y += (float) (Math.sin(i)) *4 *dy;  
     }
 
     public void  twistRight()
     {
-        int i = ui.stars.indexOf(this);
-        Star s = ui.stars.get(i);
         s.x -= (float) (Math.cos(i)) *4*dx;
         s.y -= (float) (Math.sin(i)) *4*dy;
     }
 
     public void maxIn()
     {
-        int i = ui.stars.indexOf(this);
-        Star s = ui.stars.get(i);
         s.x -= (float) (( Math.cos(i*width)*8) %Math.cos(width)) *8 *dx;
         s.y -= (float) (( Math.sin(i*height)*8) %Math.sin(height)) *8 *dy;
     }
 
     public void maxOut()
     {
-        int i = ui.stars.indexOf(this);
-        Star s = ui.stars.get(i);
         s.x += (float) (( Math.cos(i*width)*8) *dx );//%Math.cos(width);
         s.y += (float) (( Math.sin(i*height)*8) *dy);//Math.sin(height);
     }
 
-    public void gotoCircleEye()
-    {   
-        rdX = ui.rd.x;
-        rdY = ui.rd.y;
-        rdRadius = ui.rd.radius;
-        
-        int i = ui.stars.indexOf(this);
+    public void gotoCircleInverse()
+    {           
         v2 = new PVector( (rdX + (rdRadius * (float) Math.cos(i))), (rdY + (rdRadius * (float) Math.sin(i))) ) ;
         v1 = new PVector(x, y);
         v2.sub(v1);
         x += v2.x/speed;
         y += v2.y/speed;
+    }
+
+    public void nameCheck()
+    {
+        if(name == "stars") 
+        {
+            keyMovement();
+            i = ui.stars.indexOf(this);
+            s = ui.stars.get(i);
+            rdX = ui.rd.x;
+            rdY = ui.rd.y;
+            rdRadius = ui.rd.radius;
+        }
+        if(name == "sLeft") 
+        {
+            keyMovement();
+            i = ui.sLeft.indexOf(this);
+            s = ui.sLeft.get(i);
+            rdX = ui.rdLeft.x;
+            rdY = ui.rdLeft.y;
+            rdRadius = ui.rdLeft.radius;
+        }
+        if(name == " ")
+        {
+            i = ui.sBackground.indexOf(this);
+            s = ui.sBackground.get(i);
+            rdX = width/2;
+            rdY = height/2;
+            rdRadius = ui.rd.radius/3;
+            keyMovement();
+        }
     }
 
 }
