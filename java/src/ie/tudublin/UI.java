@@ -22,13 +22,8 @@ public class UI extends PApplet
     public void settings() {
         // size(800, 800);
         // Use fullscreen instead of size to make your interface fullscreen
-<<<<<<< HEAD
-        fullScreen(); 
-        // fullScreen(P3D); 
-=======
         fullScreen(P3D,SPAN); 
         // fullScreen();
->>>>>>> working
     }
 
     public void setup() {
@@ -50,20 +45,6 @@ public class UI extends PApplet
     
     public void instatiate()
     {
-<<<<<<< HEAD
-        // b = new Button(this, 50, 50, 100, 50, "I am a button");
-        // mc = new MovingCircle(this, centerX, centerY, DUnit*2);
-        // rd = new Radar(this, 2, centerX/2, centerY/2, DUnit);
-        // aw = new AudioWave(this);
-
-        // for (int i = 0; i < stars.length; i++)
-        // {
-        //     stars[i] = new Stars(this, DUnit);
-        // }
-
-        mc = new MovingCircle(this, width / 2, height * .75f, 50);
-        radar = new Radar(this, 1, width / 2, height / 2, 100);
-=======
         b = new Button(this, 50, 50, 100, 50, "I am a button");
         mc = new MovingCircle(this, centerX, centerY, DUnit*2);
         rd = new Radar(this, centerX, centerY, DUnit);
@@ -77,7 +58,6 @@ public class UI extends PApplet
         for (int i = 0; i < lots/2; i++) {
             sBackground.add(new Star(this, DUnit/2));
         }
->>>>>>> working
     }
 
     Radar radar;
@@ -109,20 +89,9 @@ public class UI extends PApplet
         //     s.render();
         // }
 
-<<<<<<< HEAD
-        // for (int i = 0; i < stars.length; i++)
-        // {    
-        //     stars[i].render();
-        //     stars[i].update();
-        // }
-        
-        radar.update();
-        radar.render();
-=======
 
             
         
->>>>>>> working
 
         if (checkKey(LEFT))
         {
