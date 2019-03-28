@@ -82,10 +82,10 @@ public class UI extends PApplet
             s.render();
         }
 
-        for (Star s : sBackground) {
-            s.update();
-            s.render();
-        }
+        // for (Star s : sBackground) {
+        //     s.update();
+        //     s.render();
+        // }
 
 
             
