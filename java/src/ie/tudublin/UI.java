@@ -1,7 +1,6 @@
 package ie.tudublin;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import processing.core.PApplet;
 
@@ -15,9 +14,10 @@ public class UI extends PApplet
     Button b;
     MovingCircle mc;
     Radar rd;
+    Radar rdLeft;
     AudioWave aw;
     public  ArrayList<Star> stars = new  ArrayList<Star>();
-    public Iterator<Star> it = stars.iterator();
+    public  ArrayList<Star> sBackground = new  ArrayList<Star>();
 
     public void settings() {
         // size(800, 800);
@@ -48,10 +48,15 @@ public class UI extends PApplet
         b = new Button(this, 50, 50, 100, 50, "I am a button");
         mc = new MovingCircle(this, centerX, centerY, DUnit*2);
         rd = new Radar(this, centerX, centerY, DUnit);
+        rdLeft = new Radar(this, centerX/4, centerY/4, DUnit/2);
         aw = new AudioWave(this);
 
         for (int i = 0; i < lots; i++) {
             stars.add(new Star(this, DUnit));
+        }
+
+        for (int i = 0; i < lots/2; i++) {
+            sBackground.add(new Star(this, DUnit/2));
         }
     }
 
@@ -65,15 +70,24 @@ public class UI extends PApplet
         // mc.update();
         // mc.render();
         
-
+        // show and update radar objects
         rd.update();
         rd.render();
+        rdLeft.update();
+        rdLeft.render();
 
         // foreach loop which makes eases the arraylist way of doing things
         for (Star s : stars) {
             s.update();
             s.render();
         }
+
+        for (Star s : sBackground) {
+            s.update();
+            s.render();
+        }
+
+
             
         
 
@@ -115,6 +129,7 @@ public class UI extends PApplet
     public void mouseDragged()
     {
         rd.mouseDragged();
+        rdLeft.mouseDragged();
     }
 }
 

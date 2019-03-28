@@ -43,7 +43,7 @@ public class Star extends ArtForms
         ui.noFill();
         // for (int i = 0; i < ui.frameCount%255; i++) {
             // for (int j = 0; j < ui.frameCount%255; j++) {
-                ui.stroke(ui.frameCount%255, 40, 150);
+                ui.stroke(ui.frameCount%255, 100, 250);
             // }
         // }
 
@@ -66,11 +66,7 @@ public class Star extends ArtForms
         speed = (float) (Math.random() * (30) + 1);
         // speed = 10;
 
-        // if ( (x > width || x < 0) || (y > height || y < 0)) {
-        //     // gotoCircle();gotoCircle();gotoCircle();gotoCircle();gotoCircle();
-        //     dx *= -1;
-        //     dy *= -1;            
-        // }
+        // keep star onscreen
         if (x <= 0 || x >= width)
         {
             dx *= -1;
@@ -101,8 +97,6 @@ public class Star extends ArtForms
     
     public void gotoLine()
     {
-        // int i = ui.stars.indexOf(this);
-        // Star s = ui.stars.get(i);
         // s.x = (float) (ui.map(i, 0, ui.stars.size(), 0, width));
         // s.y = height/2;
 
@@ -165,6 +159,20 @@ public class Star extends ArtForms
         Star s = ui.stars.get(i);
         s.x += (float) (( Math.cos(i*width)*8) *dx );//%Math.cos(width);
         s.y += (float) (( Math.sin(i*height)*8) *dy);//Math.sin(height);
+    }
+
+    public void gotoCircleEye()
+    {   
+        rdX = ui.rd.x;
+        rdY = ui.rd.y;
+        rdRadius = ui.rd.radius;
+        
+        int i = ui.stars.indexOf(this);
+        v2 = new PVector( (rdX + (rdRadius * (float) Math.cos(i))), (rdY + (rdRadius * (float) Math.sin(i))) ) ;
+        v1 = new PVector(x, y);
+        v2.sub(v1);
+        x += v2.x/speed;
+        y += v2.y/speed;
     }
 
 }

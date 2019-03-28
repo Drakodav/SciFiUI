@@ -60,39 +60,6 @@ public class AudioWave
                     , middle + song.left.get(i) * middle/2);
         }
 
-
-
-        // for(int i = 0; i < song.bufferSize() - 1; i++)
-        // {
-        //     // map the color to the color range
-        //     ui.stroke(UI.map(i, 0, song.bufferSize(), 0, 255), 255, 255);
-
-        //     // map the line to the width of the screeen
-        //     ui.line(  UI.map(i, 0, song.bufferSize(), 0, ui.width)
-        //             , middle
-        //             , UI.map(i, 0, song.bufferSize(), 0, ui.width)
-        //             , middle + song.left.get(i) * middle);
-        // }
-        
-
-        // for(int i = 0 ; i < ai.bufferSize(); i ++)
-        // {
-        //     // map the color to the color range
-        //     ui.stroke(ui.map(i, 0, ai.bufferSize(), 0, 255), 255, 255);
-
-        //     // map the line to the width of the screeen
-        //     ui.line( ui.map(i, 0, ai.bufferSize(), 0, ui.width)
-        //             , middle
-        //             , ui.map(i, 0, ai.bufferSize(), 0, ui.width)
-        //             , middle + ai.left.get(i) * middle);
-        // }
-        // fft.forward(ai.left);
-
-        // for(int i = 0 ; i < fft.specSize() ; i ++)
-        // {
-        //     ui.stroke(ui.map(i, 0, ai.bufferSize(), 0, 255), 255, 255);            
-        //     ui.ellipse(i, middle/2, i, fft.getBand(i) * 20);
-        // }
     }
 
     public void radarBeat()
@@ -104,8 +71,7 @@ public class AudioWave
             for(int i= ui.stars.size() - 1 ;   i >= 0 ;    i--)
             {
                 Star s = ui.stars.get(i);
-                if(i%2==0) s.twistLeft();
-                if(i%2==1) s.twistRight(); s.gotoCircle();
+                s.maxOut();
             }
         }
         if ( !beat.isOnset()) 
@@ -124,8 +90,9 @@ public class AudioWave
             s.update();
             s.render();
             // if(ui.frameCount%50==0 && beat.isOnset()) s.gotoLine();
-            if(fft.getBand(2) > 0 && fft.getBand(2) < 1) s.maxOut();
+            if(fft.getBand(2) > 0 && fft.getBand(2) < 1) s.gotoLine();
             s.gotoCircle();
         }
     }
+
 }

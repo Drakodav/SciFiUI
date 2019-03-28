@@ -46,8 +46,11 @@ public class Radar
 
     void mouseDragged()
     {
-        x = ui.mouseX;
-        y = ui.mouseY;
+        if ( UI.between(ui.mouseX, x-radius, x+radius) && UI.between(ui.mouseY, y-radius, y+radius) )
+        {
+            x = ui.mouseX;
+            y = ui.mouseY;
+        }
     }
 
 }
