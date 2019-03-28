@@ -1,6 +1,8 @@
 package ie.tudublin;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+
 import processing.core.PApplet;
 
 public class UI extends PApplet
@@ -15,18 +17,16 @@ public class UI extends PApplet
     Radar rd;
     AudioWave aw;
     public  ArrayList<Star> stars = new  ArrayList<Star>();
+    public Iterator<Star> it = stars.iterator();
 
-    public void settings()
-    {
-        
+    public void settings() {
         // size(800, 800);
         // Use fullscreen instead of size to make your interface fullscreen
-        // fullScreen(P3D,SPAN); 
-        fullScreen();
+        fullScreen(P3D,SPAN); 
+        // fullScreen();
     }
 
-    public void setup()
-    {
+    public void setup() {
         // set a colormode
         colorMode(HSB, 255, 255, 255);
         smooth();
@@ -50,11 +50,11 @@ public class UI extends PApplet
         rd = new Radar(this, centerX, centerY, DUnit);
         aw = new AudioWave(this);
 
-        for (int i = 0; i < lots; i++)
-        {
+        for (int i = 0; i < lots; i++) {
             stars.add(new Star(this, DUnit));
         }
     }
+
     public void draw()
     {
         background(0);
@@ -69,19 +69,17 @@ public class UI extends PApplet
         rd.update();
         rd.render();
 
-        for(int i= stars.size() - 1 ;   i >= 0 ;    i--)
-        {
-            Star s = stars.get(i);
-            s.render();
+        // foreach loop which makes eases the arraylist way of doing things
+        for (Star s : stars) {
             s.update();
+            s.render();
         }
             
         
 
         if (checkKey(LEFT))
         {
-            System.out.println("Left arrow key pressed");
-            System.out.println(centerX + " vs " + width/2);
+            System.out.println("Check : ");
         }
     }
 
@@ -102,6 +100,21 @@ public class UI extends PApplet
     {
         return keys[c] || keys [Character.toUpperCase(c)];
     }
-    
+
+    // a range between function
+    public static boolean between(float i, float minValueInclusive, float maxValueInclusive) {
+        if (i >= minValueInclusive && i <= maxValueInclusive)
+            return true;
+        else
+            return false;
+    }
+
+	public void millis(int i) {
+	}
+ 
+    public void mouseDragged()
+    {
+        rd.mouseDragged();
+    }
 }
 

@@ -1,11 +1,11 @@
 package ie.tudublin;
 
-public abstract class Stars
+public abstract class ArtForms
 {
     protected UI ui;
     protected float unit;
 
-    public Stars(UI ui, float unit)
+    public ArtForms(UI ui, float unit)
     {
         this.ui = ui;
         this.unit = unit/64; // 1 size unit
