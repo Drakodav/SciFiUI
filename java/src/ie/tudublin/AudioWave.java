@@ -47,19 +47,19 @@ public class AudioWave
 
         float middle = height / 5 * 4;
 
-        fft.forward(song.mix); // need in order for get band to work
+        fft.forward(song.left); // need in order for get band to work
 
-        for(int i = 0; i < fft.specSize() - 1; i++)
-        {
-            // map the color to the color range
-            ui.stroke(UI.map(i, 0, fft.specSize(), 0, 255), 255, 255);
+        // for(int i = 0; i < fft.specSize() - 1; i++)
+        // {
+        //     // map the color to the color range
+        //     ui.stroke(UI.map(i, 0, fft.specSize(), 0, 255), 255, 255);
 
-            // map the line to the width of the screeen
-            ui.line(  UI.map(i, 0, fft.specSize(), 0, ui.width)
-                    , middle
-                    , UI.map(i, 0, fft.specSize(), 0, ui.width)
-                    , middle + song.left.get(i) * middle/2);
-        }
+        //     // map the line to the width of the screeen
+        //     ui.line(  UI.map(i, 0, fft.specSize(), 0, ui.width)
+        //             , middle
+        //             , UI.map(i, 0, fft.specSize(), 0, ui.width)
+        //             , middle + song.left.get(i) * middle/2);
+        // }
 
     }
 
@@ -77,7 +77,7 @@ public class AudioWave
 
     public void radarBeat()
     {
-        beat.detect(song.right);
+        beat.detect(song.mix);
         if ( beat.isOnset()) 
         {
             ui.rd.diameter = rdDiameter + ui.rd.radius;
