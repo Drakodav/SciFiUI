@@ -2,18 +2,18 @@ package ie.tudublin;
 
 import java.util.Arrays;
 
-import ddf.minim.AudioInput;
-// import ddf.minim.AudioPlayer;
+// import ddf.minim.AudioInput;
+import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
 import ddf.minim.analysis.BeatDetect;
 import ddf.minim.analysis.FFT;
 
 public class AudioWave
 {
-    AudioInput song;
+    // AudioInput song;
     FFT fft;
     UI ui;
-    // AudioPlayer song;
+    AudioPlayer song;
     Minim minim;
     BeatDetect beat;
 
@@ -21,14 +21,17 @@ public class AudioWave
     public static final int SAMPLE_RATE = 44100;
     public static final int BITS_PER_SAMPLE = 16;
     private float rdDiameter;
+    private float[] bands;
+    private float[] lerpedBands;
+    private float[] bandAverages;
 
 	public AudioWave(UI ui)
     {
         this.ui = ui;
         minim = new Minim(ui);
-        song = minim.getLineIn(Minim.MONO, FRAME_SIZE, SAMPLE_RATE, BITS_PER_SAMPLE);
-        // song = minim.loadFile(ui.dataPath("n2.mp3"), 1024);
-        // song.loop();
+        // song = minim.getLineIn(Minim.MONO, FRAME_SIZE, SAMPLE_RATE, BITS_PER_SAMPLE);
+        song = minim.loadFile(ui.dataPath("n4.mp3"), 1024);
+        song.loop();
         beat = new BeatDetect();
         // fft = new FFT(song.bufferSize(), song.sampleRate());   
 
@@ -48,7 +51,6 @@ public class AudioWave
         radarBeat();
         radarBeatLeft();
         
-        // float middle = ui.height/6*5;
         
         fft.forward(song.mix);
         
@@ -58,25 +60,10 @@ public class AudioWave
         for(int i = 0 ; i < bands.length ; i ++)
         {
             ui.fill(i * colorGap, 255, 255);
-            ui.rect(i * gap, ui.height, gap, -lerpedBands[i]*5); 
+            ui.rect(i * gap, ui.height, gap, -lerpedBands[i]); 
         }
-
-        // for(int i = 0; i < fft.specSize() - 1; i++)
-        // {
-        //     // map the color to the color range
-        //     ui.stroke(UI.map(i, 0, fft.specSize(), 0, 255), 255, 255);
-
-        //     // map the line to the width of the screeen
-        //     ui.line(  UI.map(i, 0, fft.specSize(), 0, ui.width)
-        //             , middle
-        //             , UI.map(i, 0, fft.specSize(), 0, ui.width)
-        //             , middle + song.left.get(i) * middle/2);
-        // }        
+              
     }
-    float[] bands;
-    float[] lerpedBands;
-    float[] bandAverages;
-    public double threshold;
 
     public boolean getFrequencyBands(int i)
     {         
@@ -95,46 +82,36 @@ public class AudioWave
             average /= (float) w;
             bands[i] = average * 5.0f;
             lerpedBands[i] = UI.lerp(lerpedBands[i], bands[i], 0.05f);
-           
-            // if (lerpedBands[i] >= bandAverages[i] ) {
-            //     bandAverages[i] = (bandAverages[i] + lerpedBands[i]) / 2 ;   
-            // }else{
-            //     bandAverages[i] = 0; //(bandAverages[i] - lerpedBands[i]) / 2 ;
-            // }
-            float check = 0;
-            threshold = (double) Math.abs(lerpedBands[i] - bandAverages[i]);
 
-            if ( (int)lerpedBands[i] <= (double)bandAverages[i] && threshold < 5.5) {
-                check = 0;
-                System.out.println( "lerp: " +  lerpedBands[i] + " &&  " + bandAverages[i] + " diff: " + threshold);                
+            if ( (double)lerpedBands[i] <= (double)bandAverages[i] ) {
+                System.out.println( "lerp: " +  lerpedBands[i] + " &&  " + bandAverages[i]);                
                 return false;
             }else { // array values are growing and bandAvg is less than lerpBands
-                check = lerpedBands[i];
-                System.out.println( "lerp: " +  lerpedBands[i] + " &&  " + bandAverages[i] + " diff: " + threshold);                
+                System.out.println( "lerp: " +  lerpedBands[i] + " &&  " + bandAverages[i] + " True");                
                 return true;
             }
-            
-        
-            
-            // bandAverages[i] = lerpedBands[i];
         // }
     }
-    
     public void radarBeatLeft()
     {
-        if(getFrequencyBands(0)) {
+        if(getFrequencyBands(6) ) {
             for (Star s : ui.sLeft) {
                 s.update();
                 s.render();
-                
-                s.maxIn();
+                s.gotoCircleInverse();
+                s.gotoCircleInverse();
             }
         }
         
-        for (Star s : ui.sLeft) {
-            s.update();
-            s.render();
-            s.gotoCircle();
+        if(!getFrequencyBands(6) ) {
+            for(int i= ui.sLeft.size() - 1 ;   i >= 0 ; i--) {
+                Star s = ui.sLeft.get(i);
+                s.update();
+                s.render();
+                if (i%2 == 0) s.twistRight();
+                if (i%2 == 1) s.twistLeft();
+                s.gotoCircleInverse();       
+            }
         }
     }
 
@@ -162,13 +139,11 @@ public class AudioWave
             }
             ui.rd.diameter = rdDiameter;
         }
-        
-        
+         
         for (Star s : ui.stars) {
             s.update();
             s.render();
-            if(ui.frameCount%50==0 && beat.isOnset()) s.gotoLine();
-            // if(fft.getBand(2) > 0 && fft.getBand(2) < 1) s.gotoLine();
+            if(getFrequencyBands(0) && beat.isOnset()) s.maxOut();
             s.gotoCircle();
         }
     }

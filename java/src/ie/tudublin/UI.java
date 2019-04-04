@@ -48,7 +48,7 @@ public class UI extends PApplet
         b = new Button(this, 50, 50, 100, 50, "I am a button");
         mc = new MovingCircle(this, centerX, centerY, DUnit*2);
         rd = new Radar(this, centerX, centerY, DUnit);
-        rdLeft = new Radar(this, centerX/4, centerY/4, DUnit/2);
+        rdLeft = new Radar(this, centerX/3, centerY, DUnit/2);
         aw = new AudioWave(this);
 
         for (int i = 0; i < lots; i++) {
@@ -125,6 +125,21 @@ public class UI extends PApplet
             return true;
         else
             return false;
+    }
+
+    final static double EPSILON = 1e-12;
+
+    public static double map(double valueCoord1,
+            double startCoord1, double endCoord1,
+            double startCoord2, double endCoord2) {
+
+        if (Math.abs(endCoord1 - startCoord1) < EPSILON) {
+            throw new ArithmeticException("/ 0");
+        }
+
+        double offset = startCoord2;
+        double ratio = (endCoord2 - startCoord2) / (endCoord1 - startCoord1);
+        return ratio * (valueCoord1 - startCoord1) + offset;
     }
 
     public void mouseDragged()

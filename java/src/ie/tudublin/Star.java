@@ -67,8 +67,8 @@ public class Star extends ArtForms
         nameCheck();
         randomMovement();
         
-        speed = (float) (Math.random() * (30) + 1);
-        // speed = 10;
+        speed = (float) (Math.random() * (40) + 1);
+        // speed = 15;
 
         // keep star onscreen
         if (x <= 0 || x >= width)
