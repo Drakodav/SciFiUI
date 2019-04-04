@@ -50,51 +50,49 @@ public class AudioWave
         beat.detect(song.mix);
         radarBeat();
         radarBeatLeft();
+        radarBeatRight();
         
         
         fft.forward(song.mix);
         
+        //display band bars
         float gap = ui.width / (float) bands.length;
         ui.noStroke();
         float colorGap = 255 / (float) bands.length;
         for(int i = 0 ; i < bands.length ; i ++)
         {
             ui.fill(i * colorGap, 255, 255);
-            ui.rect(i * gap, ui.height, gap, -lerpedBands[i]); 
+            ui.rect(i * gap, ui.height, gap, -lerpedBands[i]/2); 
         }
               
     }
 
-    public boolean getFrequencyBands(int i)
-    {         
-    // for (int i = 0; i < bands.length; i++)
-    // {
-            bandAverages[i] = lerpedBands[i];
-            
-            int start = (int)Math.pow(2, i) - 1;
-            int w = (int)Math.pow(2, i);
-            int end = start + w;
-            float average = 0;
-            for (int j = start; j < end; j++)
-            {
-                average += fft.getBand(j) * (j + 1);
+    public void radarBeatRight()
+    {
+        if(getFrequencyBands(7) ) {
+            for (Star s : ui.sRight) {
+                s.update();
+                s.render();
+                s.gotoCircleInverse();
+                s.gotoCircleInverse();
             }
-            average /= (float) w;
-            bands[i] = average * 5.0f;
-            lerpedBands[i] = UI.lerp(lerpedBands[i], bands[i], 0.05f);
-
-            if ( (double)lerpedBands[i] <= (double)bandAverages[i] ) {
-                System.out.println( "lerp: " +  lerpedBands[i] + " &&  " + bandAverages[i]);                
-                return false;
-            }else { // array values are growing and bandAvg is less than lerpBands
-                System.out.println( "lerp: " +  lerpedBands[i] + " &&  " + bandAverages[i] + " True");                
-                return true;
+        }
+        
+        if(!getFrequencyBands(7) ) {
+            for(int i= ui.sRight.size() - 1 ;   i >= 0 ; i--) {
+                Star s = ui.sRight.get(i);
+                s.update();
+                s.render();
+                if (i%2 == 0) s.twistRight();
+                if (i%2 == 1) s.twistLeft();
+                s.gotoCircleInverse();       
             }
-        // }
+        }
     }
+
     public void radarBeatLeft()
     {
-        if(getFrequencyBands(6) ) {
+        if(getFrequencyBands(2) ) {
             for (Star s : ui.sLeft) {
                 s.update();
                 s.render();
@@ -103,7 +101,7 @@ public class AudioWave
             }
         }
         
-        if(!getFrequencyBands(6) ) {
+        if(!getFrequencyBands(2) ) {
             for(int i= ui.sLeft.size() - 1 ;   i >= 0 ; i--) {
                 Star s = ui.sLeft.get(i);
                 s.update();
@@ -148,9 +146,39 @@ public class AudioWave
         }
     }
 
+    // return a log2 of a number
     float log2(float f) 
     {
         return (float) (Math.log(f) / Math.log(2.0f));
+    }
+
+    public boolean getFrequencyBands(int i)
+    {         
+    // for (int i = 0; i < bands.length; i++)
+    // {
+            bandAverages[i] = lerpedBands[i]; // set bandAvg to previous value of lerpbands
+            
+            int start = (int)Math.pow(2, i) - 1;
+            int w = (int)Math.pow(2, i);
+            int end = start + w;
+            float average = 0;
+            for (int j = start; j < end; j++)
+            {
+                average += fft.getBand(j) * (j + 1);
+            }
+            average /= (float) w;
+            bands[i] = average * 5.0f;
+            lerpedBands[i] = UI.lerp(lerpedBands[i], bands[i], 0.05f);
+
+            // tracking algorithm for beat detection
+            if ( (double)lerpedBands[i] <= (double)bandAverages[i] ) {
+                // System.out.println( "lerp: " +  lerpedBands[i] + " &&  " + bandAverages[i]);                
+                return false;
+            }else { // array values are growing and bandAvg is less than lerpBands
+                // System.out.println( "lerp: " +  lerpedBands[i] + " &&  " + bandAverages[i] + " True");                
+                return true;
+            }
+        // }
     }
 
 }

@@ -15,9 +15,11 @@ public class UI extends PApplet
     MovingCircle mc;
     Radar rd;
     Radar rdLeft;
+    Radar rdRight;
     AudioWave aw;
     public  ArrayList<Star> stars = new  ArrayList<Star>();
     public  ArrayList<Star> sLeft = new  ArrayList<Star>();
+    public  ArrayList<Star> sRight = new  ArrayList<Star>();
     public  ArrayList<Star> sBackground = new  ArrayList<Star>();
 
     public void settings() {
@@ -49,6 +51,7 @@ public class UI extends PApplet
         mc = new MovingCircle(this, centerX, centerY, DUnit*2);
         rd = new Radar(this, centerX, centerY, DUnit);
         rdLeft = new Radar(this, centerX/3, centerY, DUnit/2);
+        rdRight = new Radar(this, centerX/3 * 5, centerY, DUnit/2);
         aw = new AudioWave(this);
 
         for (int i = 0; i < lots; i++) {
@@ -57,13 +60,14 @@ public class UI extends PApplet
         for (int i = 0; i < lots/2; i++) {
             sLeft.add(new Star(this, DUnit/2, "sLeft"));
         }
+        for (int i = 0; i < lots/2; i++) {
+            sRight.add(new Star(this, DUnit/2, "sRight"));
+        }
         for (int i = 0; i < lots; i++) {
             sBackground.add(new Star(this, DUnit/2, " "));
         }
         
     }
-
-    Radar radar;
 
     public void draw()
     {
@@ -80,6 +84,8 @@ public class UI extends PApplet
         rd.render();
         rdLeft.update();
         rdLeft.render();
+        rdRight.update();
+        rdRight.render();
 
         // foreach loop which makes eases the arraylist way of doing things
         for (Star s : stars) {
@@ -87,6 +93,10 @@ public class UI extends PApplet
             s.render();
         }
         for (Star s : sLeft) {
+            s.update();
+            s.render();
+        }
+        for (Star s : sRight) {
             s.update();
             s.render();
         }
@@ -146,6 +156,7 @@ public class UI extends PApplet
     {
         rd.mouseDragged();
         rdLeft.mouseDragged();
+        rdRight.mouseDragged();
     }
 }
 

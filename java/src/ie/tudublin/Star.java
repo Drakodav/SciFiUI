@@ -20,6 +20,7 @@ public class Star extends ArtForms
     private String name;
     private int i;
     private Star s;
+    private int color;
 
     public Star(UI ui, float unit, String name)
     {
@@ -45,11 +46,9 @@ public class Star extends ArtForms
     {
         ui.stroke(0);
         ui.noFill();
-        // for (int i = 0; i < ui.frameCount%255; i++) {
-            // for (int j = 0; j < ui.frameCount%255; j++) {
-                ui.stroke(ui.frameCount%255, 100, 250);
-            // }
-        // }
+        
+        ui.stroke(color, 100, 250);
+        
 
         ui.pushMatrix();
         ui.translate(x, y);
@@ -163,8 +162,10 @@ public class Star extends ArtForms
         // x += v2.x/speed;
         // y += v2.y/speed;
 
-        x = UI.map(i, 0, 100, 0, width);
-        y = UI.map(i%2, 0, 100, 0, height);
+        
+        // make an animation function and keep it in the update for smooth movement 
+        // add flags to set on and off
+        
 
     }
 
@@ -172,7 +173,8 @@ public class Star extends ArtForms
     {
         if(name == "stars") 
         {
-            keyMovement();
+            color = ui.frameCount*i%255;
+            // keyMovement();
             i = ui.stars.indexOf(this);
             s = ui.stars.get(i);
             rdX = ui.rd.x;
@@ -181,15 +183,27 @@ public class Star extends ArtForms
         }
         if(name == "sLeft") 
         {
-            keyMovement();
+            color = ui.frameCount*i%255;
+            // keyMovement();
             i = ui.sLeft.indexOf(this);
             s = ui.sLeft.get(i);
             rdX = ui.rdLeft.x;
             rdY = ui.rdLeft.y;
             rdRadius = ui.rdLeft.radius;
         }
+        if(name == "sRight") 
+        {
+            color = ui.frameCount*i%255;
+            // keyMovement();
+            i = ui.sRight.indexOf(this);
+            s = ui.sRight.get(i);
+            rdX = ui.rdRight.x;
+            rdY = ui.rdRight.y;
+            rdRadius = ui.rdRight.radius;
+        }
         if(name == " ")
         {
+            color = ui.frameCount%255;
             i = ui.sBackground.indexOf(this);
             s = ui.sBackground.get(i);
             rdX = width/2;
