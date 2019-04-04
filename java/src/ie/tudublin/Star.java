@@ -7,8 +7,8 @@ public class Star extends ArtForms
     public PVector v1;
     public PVector v2;
     
-    private float x;
-    private float y;
+    public float x;
+    public float y;
     private float dx = 1;
     private float dy = 1;
     private float width;
@@ -155,6 +155,19 @@ public class Star extends ArtForms
         y += v2.y/speed;
     }
 
+    public void gotoRectangle()
+    {
+        // v2 = new PVector( ((float) (UI.map(i, 0, ui.stars.size(), 0, width))) , (height/2) );
+        // v1 = new PVector(x, y);
+        // v2.sub(v1);
+        // x += v2.x/speed;
+        // y += v2.y/speed;
+
+        x = UI.map(i, 0, 100, 0, width);
+        y = UI.map(i%2, 0, 100, 0, height);
+
+    }
+
     public void nameCheck()
     {
         if(name == "stars") 
@@ -183,6 +196,9 @@ public class Star extends ArtForms
             rdY = height/2;
             rdRadius = ui.rd.radius/3;
             keyMovement();
+            if (ui.checkKey('q')) {
+                s.gotoRectangle();
+            }
         }
     }
 
