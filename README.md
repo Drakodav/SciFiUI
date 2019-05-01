@@ -58,9 +58,7 @@ and astonishing patterns.
 
 # Markdown Tutorial
 
-This is a [hyperlink](http://bryanduggan.org)
+Youtube video:
 
-This is a youtube video:
-
-[![YouTube](http://img.youtube.com/vi/J2kHSSFA4NU/0.jpg)](https://www.youtube.com/watch?v=J2kHSSFA4NU)
+[![YouTube](https://img.youtube.com/vi/hwPyoFMUxs0/0.jpg)](https://youtu.be/hwPyoFMUxs0)
 
