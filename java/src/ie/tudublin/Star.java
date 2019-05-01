@@ -4,23 +4,20 @@ import processing.core.PVector;
 
 public class Star extends ArtForms
 {
-    public PVector v1;
-    public PVector v2;
-    
-    public float x;
-    public float y;
+    public PVector v1, v2;
+    public float x, y;
+    public float rdX, rdY, rdRadius;
+
     private float dx = 1;
     private float dy = 1;
     private float width;
     private float height;
     private float speed;
-    private float rdX;
-    private float rdY;
-    private float rdRadius;
     private String name;
     private int i;
     private Star s;
-    private int color;
+    private float color1, color2, color3;
+    public AudioWave aw;
 
     public Star(UI ui, float unit, String name)
     {
@@ -37,9 +34,9 @@ public class Star extends ArtForms
         v1 = new PVector(x,y);
         v2 = new PVector(0,0);
 
-        rdX = ui.rd.x;
-        rdY = ui.rd.y;
-        rdRadius = ui.rd.radius;
+        aw = ui.aw;
+
+    color1 = 0; color2 = 100; color3 = 250;
     }
 
     public void render()
@@ -47,7 +44,7 @@ public class Star extends ArtForms
         ui.stroke(0);
         ui.noFill();
         
-        ui.stroke(color, 100, 250);
+        ui.stroke(color1, color2, color3);
         
 
         ui.pushMatrix();
@@ -66,7 +63,7 @@ public class Star extends ArtForms
         nameCheck();
         randomMovement();
         
-        speed = (float) (Math.random() * (40) + 1);
+        speed =(float) (Math.random() * (40) + 1);
         // speed = 15;
 
         // keep star onscreen
@@ -77,7 +74,7 @@ public class Star extends ArtForms
         if (y <= 0 || y >= height)
         {
             dy *= -1;            
-        }        
+        }             
     }
 
     public void keyMovement()
@@ -89,6 +86,7 @@ public class Star extends ArtForms
         if (ui.checkKey('x')) twistRight();
         if (ui.checkKey('a')) maxIn();
         if (ui.checkKey('s')) maxOut();
+        if (ui.checkKey('c')) clover();
     }
 
     public void randomMovement()
@@ -101,17 +99,13 @@ public class Star extends ArtForms
     
     public void gotoLine()
     {
-        // s.x = (float) (ui.map(i, 0, ui.stars.size(), 0, width));
-        // s.y = height/2;
-
         v2 = new PVector( ((float) (UI.map(i, 0, ui.stars.size(), 0, width))) , (height/2) );
         v1 = new PVector(x, y);
         v2.sub(v1);
         x += v2.x/speed;
         y += v2.y/speed;
     }
-    // code below makes an eye shape
-    // v2 = new PVector( (rdX + (rdRadius * (float) Math.cos(i))), (rdY + (rdRadius * (float) Math.sin(i))) ) ;
+    
     public void gotoCircle()
     {                
         v2 = new PVector( (rdX + (rdRadius * (float) Math.sin(i))), (rdY + (rdRadius * (float) Math.cos(i))) ) ;
@@ -154,26 +148,43 @@ public class Star extends ArtForms
         y += v2.y/speed;
     }
 
-    public void gotoRectangle()
-    {
-        // v2 = new PVector( ((float) (UI.map(i, 0, ui.stars.size(), 0, width))) , (height/2) );
-        // v1 = new PVector(x, y);
-        // v2.sub(v1);
-        // x += v2.x/speed;
-        // y += v2.y/speed;
+    public void clover(){
+        float circle;
+        float freq = 5; 
+        float sz = height/5;
+        float gap = width/50;
 
-        
-        // make an animation function and keep it in the update for smooth movement 
-        // add flags to set on and off
-        
+        circle = (float) (sz + gap * Math.sin(ui.millis() * freq/1000000 * i));
+        float r = UI.map(circle,sz,sz+gap,5,2);
+        v2 = new PVector( width/2 + r + (float) (circle*Math.cos(i)) * 2, height/2 + r + (float) (circle*Math.sin(i)) * 2 );
+        v1 = new PVector(x, y);
 
+        color1 = UI.map(circle, sz, sz + gap, 100, 255);
+        r = UI.map(circle,sz,sz+gap,150,225);
+        color2 = r; color3 = r;
+        // ui.fill( (UI.map(circle,sz,sz+gap,60,255)), r, r);
+        v2.sub(v1);
+        x += v2.x/speed;  
+        y += v2.y/speed;
+    }
+
+    private int scl = 0;
+    private boolean busy = false;
+    public void controlBackground(){
+        // take care of color
+        if (aw.getFrequencyBands(0))
+            scl = (scl + 1 )%200;
+
+        color1 = (float) UI.map(scl + 25 * Math.sin(UI.second() * 5* i), 0, 255, 255, 0);
+
+        // take care of movement
     }
 
     public void nameCheck()
     {
         if(name == "stars") 
         {
-            color = ui.frameCount*i%255;
+            color1 = ui.frameCount*i%255;
             // keyMovement();
             i = ui.stars.indexOf(this);
             s = ui.stars.get(i);
@@ -183,7 +194,7 @@ public class Star extends ArtForms
         }
         if(name == "sLeft") 
         {
-            color = ui.frameCount*i%255;
+            color1 = ui.frameCount*i%255;
             // keyMovement();
             i = ui.sLeft.indexOf(this);
             s = ui.sLeft.get(i);
@@ -193,7 +204,7 @@ public class Star extends ArtForms
         }
         if(name == "sRight") 
         {
-            color = ui.frameCount*i%255;
+            color1 = ui.frameCount*i%255;
             // keyMovement();
             i = ui.sRight.indexOf(this);
             s = ui.sRight.get(i);
@@ -203,15 +214,15 @@ public class Star extends ArtForms
         }
         if(name == " ")
         {
-            color = ui.frameCount%255;
             i = ui.sBackground.indexOf(this);
             s = ui.sBackground.get(i);
             rdX = width/2;
             rdY = height/2;
             rdRadius = ui.rd.radius/3;
             keyMovement();
+            controlBackground();
             if (ui.checkKey('q')) {
-                s.gotoRectangle();
+                System.out.println("q pressed");
             }
         }
     }

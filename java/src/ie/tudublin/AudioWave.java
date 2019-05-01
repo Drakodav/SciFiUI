@@ -21,16 +21,16 @@ public class AudioWave
     public static final int SAMPLE_RATE = 44100;
     public static final int BITS_PER_SAMPLE = 16;
     private float rdDiameter;
-    private float[] bands;
+    public float[] bands;
     private float[] lerpedBands;
-    private float[] bandAverages;
+    public float[] bandAverages;
 
 	public AudioWave(UI ui)
     {
         this.ui = ui;
         minim = new Minim(ui);
         // song = minim.getLineIn(Minim.MONO, FRAME_SIZE, SAMPLE_RATE, BITS_PER_SAMPLE);
-        song = minim.loadFile(ui.dataPath("n4.mp3"), 1024);
+        song = minim.loadFile(ui.dataPath("n3.mp3"), 1024);
         song.loop();
         beat = new BeatDetect();
         // fft = new FFT(song.bufferSize(), song.sampleRate());   
@@ -48,6 +48,7 @@ public class AudioWave
     {
         ui.stroke(255);
         beat.detect(song.mix);
+        getBandValues();
         radarBeat();
         radarBeatLeft();
         radarBeatRight();
@@ -56,14 +57,14 @@ public class AudioWave
         fft.forward(song.mix);
         
         //display band bars
-        float gap = ui.width / (float) bands.length;
-        ui.noStroke();
-        float colorGap = 255 / (float) bands.length;
-        for(int i = 0 ; i < bands.length ; i ++)
-        {
-            ui.fill(i * colorGap, 255, 255);
-            ui.rect(i * gap, ui.height, gap, -lerpedBands[i]/2); 
-        }
+        // float gap = ui.width / (float) bands.length;
+        // ui.noStroke();
+        // float colorGap = 255 / (float) bands.length;
+        // for(int i = 0 ; i < bands.length ; i ++)
+        // {
+        //     ui.fill(i * colorGap, 255, 255);
+        //     ui.rect(i * gap, ui.height, gap, -lerpedBands[i]/2); 
+        // }
               
     }
 
@@ -91,7 +92,7 @@ public class AudioWave
     }
 
     public void radarBeatLeft()
-    {
+    {       
         if(getFrequencyBands(2) ) {
             for (Star s : ui.sLeft) {
                 s.update();
@@ -117,7 +118,7 @@ public class AudioWave
     {
         if ( beat.isOnset()) 
         {
-            ui.rd.diameter = rdDiameter + ui.rd.radius;
+            ui.rd.diameter = rdDiameter + ui.rd.radius/2;
             for(int i= ui.stars.size() - 1 ;   i >= 0 ; i--)
             {
                 Star s = ui.stars.get(i);
@@ -141,7 +142,7 @@ public class AudioWave
         for (Star s : ui.stars) {
             s.update();
             s.render();
-            if(getFrequencyBands(0) && beat.isOnset()) s.maxOut();
+            if(getFrequencyBands(0) && beat.isOnset() && getFrequencyBands(1)) s.maxOut();
             s.gotoCircle();
         }
     }
@@ -152,10 +153,22 @@ public class AudioWave
         return (float) (Math.log(f) / Math.log(2.0f));
     }
 
-    public boolean getFrequencyBands(int i)
+    public boolean getFrequencyBands(int b)
     {         
-    // for (int i = 0; i < bands.length; i++)
-    // {
+        // tracking algorithm for beat detection
+        if ( (double)lerpedBands[b] <= (double)bandAverages[b] ) {
+            // System.out.println( "lerp: " +  lerpedBands[i] + " &&  " + bandAverages[i]);                
+            return false;
+        }else { // array values are growing and bandAvg is less than lerpBands
+            // System.out.println( "lerp: " +  lerpedBands[i] + " &&  " + bandAverages[i] + " True");                
+            return true;
+        }
+    }
+
+    public void getBandValues()
+    {
+        for (int i = 0; i < bands.length; i++)
+        {
             bandAverages[i] = lerpedBands[i]; // set bandAvg to previous value of lerpbands
             
             int start = (int)Math.pow(2, i) - 1;
@@ -169,16 +182,7 @@ public class AudioWave
             average /= (float) w;
             bands[i] = average * 5.0f;
             lerpedBands[i] = UI.lerp(lerpedBands[i], bands[i], 0.05f);
-
-            // tracking algorithm for beat detection
-            if ( (double)lerpedBands[i] <= (double)bandAverages[i] ) {
-                // System.out.println( "lerp: " +  lerpedBands[i] + " &&  " + bandAverages[i]);                
-                return false;
-            }else { // array values are growing and bandAvg is less than lerpBands
-                // System.out.println( "lerp: " +  lerpedBands[i] + " &&  " + bandAverages[i] + " True");                
-                return true;
-            }
-        // }
+        }
     }
 
 }

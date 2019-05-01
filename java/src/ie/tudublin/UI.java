@@ -10,6 +10,7 @@ public class UI extends PApplet
     private float centerX;
     private float centerY;
     private int lots;
+    private int sec;
 
     Button b;
     MovingCircle mc;
@@ -25,8 +26,8 @@ public class UI extends PApplet
     public void settings() {
         // size(800, 800);
         // Use fullscreen instead of size to make your interface fullscreen
-        fullScreen(P3D,SPAN); 
-        // fullScreen();
+        // fullScreen(P3D,SPAN); 
+        fullScreen();
     }
 
     public void setup() {
@@ -38,8 +39,10 @@ public class UI extends PApplet
         centerX = width/2.0f;
         centerY = height/2.0f;
         // set normal unit circle diameter
-        DUnit = (height + width) / 16;
-        lots = 1000;
+        DUnit = (height + width) / 10;
+        lots = 700;
+
+        sec = 0;
 
         // instantiate objects
         instatiate();
@@ -49,24 +52,26 @@ public class UI extends PApplet
     {
         b = new Button(this, 50, 50, 100, 50, "I am a button");
         mc = new MovingCircle(this, centerX, centerY, DUnit*2);
-        rd = new Radar(this, centerX, centerY, DUnit);
-        rdLeft = new Radar(this, centerX/3, centerY, DUnit/2);
-        rdRight = new Radar(this, centerX/3 * 5, centerY, DUnit/2);
+        rd = new Radar(this, centerX, centerY, DUnit/5 * 4);
+        rdLeft = new Radar(this, centerX/3, centerY, DUnit/3);
+        rdRight = new Radar(this, centerX/3 * 5, centerY, DUnit/3);
         aw = new AudioWave(this);
 
-        for (int i = 0; i < lots; i++) {
-            stars.add(new Star(this, DUnit, "stars"));
+        // initialise arraylists
+        for (int i = 0; i < lots*2; i++) {
+            if (i<lots/2) {
+                stars.add(new Star(this, DUnit, "stars"));
+            }
+            if (i>lots/2 && i < lots/2+lots/4) {
+                sLeft.add(new Star(this, DUnit/2, "sLeft"));
+            }
+            if (i>lots/2+lots/4 && i<lots) {
+                sRight.add(new Star(this, DUnit/2, "sRight"));
+            }
+            if (i>lots && i<lots*2) {
+                sBackground.add(new Star(this, DUnit/3, " "));
+            }
         }
-        for (int i = 0; i < lots/2; i++) {
-            sLeft.add(new Star(this, DUnit/2, "sLeft"));
-        }
-        for (int i = 0; i < lots/2; i++) {
-            sRight.add(new Star(this, DUnit/2, "sRight"));
-        }
-        for (int i = 0; i < lots; i++) {
-            sBackground.add(new Star(this, DUnit/2, " "));
-        }
-        
     }
 
     public void draw()
@@ -103,11 +108,6 @@ public class UI extends PApplet
         for (Star s : sBackground) {
             s.update();
             s.render();
-        }
-
-        if (checkKey(LEFT))
-        {
-            System.out.println("Check : ");
         }
     }
 
@@ -157,6 +157,18 @@ public class UI extends PApplet
         rd.mouseDragged();
         rdLeft.mouseDragged();
         rdRight.mouseDragged();
+    }
+
+    public int oneSec(){
+        int temp = 0;
+        if ( second() % 1 == 0 ) {
+            if ( second() > sec) {
+                temp = sec;
+                System.out.println(temp);
+            }
+            sec = second();
+        }
+        return temp;
     }
 }
 
