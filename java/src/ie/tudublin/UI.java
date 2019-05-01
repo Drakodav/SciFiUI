@@ -18,6 +18,8 @@ public class UI extends PApplet
     Radar rdLeft;
     Radar rdRight;
     AudioWave aw;
+    Tempo tmp;
+    
     public  ArrayList<Star> stars = new  ArrayList<Star>();
     public  ArrayList<Star> sLeft = new  ArrayList<Star>();
     public  ArrayList<Star> sRight = new  ArrayList<Star>();
@@ -42,7 +44,7 @@ public class UI extends PApplet
         DUnit = (height + width) / 10;
         lots = 700;
 
-        sec = 0;
+        sec = second();
 
         // instantiate objects
         instatiate();
@@ -50,12 +52,13 @@ public class UI extends PApplet
     
     public void instatiate()
     {
-        b = new Button(this, 50, 50, 100, 50, "I am a button");
-        mc = new MovingCircle(this, centerX, centerY, DUnit*2);
+        // b = new Button(this, 50, 50, 100, 50, "I am a button");
+        // mc = new MovingCircle(this, centerX, centerY, DUnit*2);
         rd = new Radar(this, centerX, centerY, DUnit/5 * 4);
         rdLeft = new Radar(this, centerX/3, centerY, DUnit/3);
         rdRight = new Radar(this, centerX/3 * 5, centerY, DUnit/3);
         aw = new AudioWave(this);
+        tmp = new Tempo(this);
 
         // initialise arraylists
         for (int i = 0; i < lots*2; i++) {
@@ -77,12 +80,11 @@ public class UI extends PApplet
     public void draw()
     {
         background(0);
+
+        tmp.render();
+        tmp.update();
+
         aw.update();
-
-        //b.render();
-
-        // mc.update();
-        // mc.render();
         
         // show and update radar objects
         rd.update();
@@ -159,16 +161,29 @@ public class UI extends PApplet
         rdRight.mouseDragged();
     }
 
-    public int oneSec(){
-        int temp = 0;
+    public int secCount(){
         if ( second() % 1 == 0 ) {
             if ( second() > sec) {
-                temp = sec;
-                System.out.println(temp);
+                // System.out.println(sec);
+                sec++;
+                return sec;
             }
             sec = second();
         }
-        return temp;
+        return sec;
+    }
+
+    public boolean oneSec() {
+        if ( second() % 1 == 0 ) {
+            if ( second() > sec) {
+                // System.out.println(sec);
+                sec++;
+                return true;
+            }
+            sec = second();
+        }
+        return false;
+        
     }
 }
 

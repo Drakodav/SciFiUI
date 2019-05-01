@@ -30,7 +30,7 @@ public class AudioWave
         this.ui = ui;
         minim = new Minim(ui);
         // song = minim.getLineIn(Minim.MONO, FRAME_SIZE, SAMPLE_RATE, BITS_PER_SAMPLE);
-        song = minim.loadFile(ui.dataPath("n3.mp3"), 1024);
+        song = minim.loadFile(ui.dataPath("n1.mp3"), 1024);
         song.loop();
         beat = new BeatDetect();
         // fft = new FFT(song.bufferSize(), song.sampleRate());   
@@ -52,6 +52,7 @@ public class AudioWave
         radarBeat();
         radarBeatLeft();
         radarBeatRight();
+        backgroundBeat();
         
         
         fft.forward(song.mix);
@@ -144,6 +145,47 @@ public class AudioWave
             s.render();
             if(getFrequencyBands(0) && beat.isOnset() && getFrequencyBands(1)) s.maxOut();
             s.gotoCircle();
+        }
+    }
+
+    private int temp = 2;
+    private int count = temp;
+    private int mov = 0;
+    private float time;
+    private boolean gate = false;
+    
+    public void backgroundBeat(){
+        if (gate == false) {
+            time = ui.millis();
+        }
+
+        if (ui.tmp.isFinished()) {
+            if ( count > 0 ){
+                for (Star s : ui.sBackground) {
+                    s.controlBackground(mov);
+                    s.render();
+                    s.update();
+                }
+
+                if ( ui.millis() >= (int)(time + (ui.tmp.average *4)) ){ // checks if a tempo beat happens
+                    // System.out.println("yeah>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+                    count--;
+                    // System.out.println("c : " +count);
+                    gate = false;
+                }else{
+                    // System.out.println( time + (ui.tmp.average *4) +" :   " + ui.millis());
+                    gate = true;
+                }
+            }
+            if (count == 0) {
+                count = temp;
+                mov = (int) ui.random(0, 7);
+                if (mov == 1) count = 4;
+                // System.out.println(mov);
+            }
+
+            
+
         }
     }
 

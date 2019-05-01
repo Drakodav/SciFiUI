@@ -36,7 +36,7 @@ public class Star extends ArtForms
 
         aw = ui.aw;
 
-    color1 = 0; color2 = 100; color3 = 250;
+        color1 = 0; color2 = 100; color3 = 250;
     }
 
     public void render()
@@ -162,15 +162,15 @@ public class Star extends ArtForms
         color1 = UI.map(circle, sz, sz + gap, 100, 255);
         r = UI.map(circle,sz,sz+gap,150,225);
         color2 = r; color3 = r;
-        // ui.fill( (UI.map(circle,sz,sz+gap,60,255)), r, r);
         v2.sub(v1);
         x += v2.x/speed;  
         y += v2.y/speed;
     }
 
     private int scl = 0;
-    private boolean busy = false;
-    public void controlBackground(){
+    // private boolean busy = false;
+
+    public void controlBackground(int m){
         // take care of color
         if (aw.getFrequencyBands(0))
             scl = (scl + 1 )%200;
@@ -178,6 +178,34 @@ public class Star extends ArtForms
         color1 = (float) UI.map(scl + 25 * Math.sin(UI.second() * 5* i), 0, 255, 255, 0);
 
         // take care of movement
+        switch (m) {
+            case 1:
+                clover();
+                break;
+        
+            case 2:
+                twistRight();
+                break;
+
+            case 3:
+                maxOut();
+                break;
+
+            case 4:
+                twistLeft();
+                break;
+
+            case 5: 
+                maxIn();
+                break;
+
+            case 6:
+                gotoCircle();
+                break;
+
+            default:
+                break;
+        }
     }
 
     public void nameCheck()
@@ -185,7 +213,6 @@ public class Star extends ArtForms
         if(name == "stars") 
         {
             color1 = ui.frameCount*i%255;
-            // keyMovement();
             i = ui.stars.indexOf(this);
             s = ui.stars.get(i);
             rdX = ui.rd.x;
@@ -195,7 +222,6 @@ public class Star extends ArtForms
         if(name == "sLeft") 
         {
             color1 = ui.frameCount*i%255;
-            // keyMovement();
             i = ui.sLeft.indexOf(this);
             s = ui.sLeft.get(i);
             rdX = ui.rdLeft.x;
@@ -205,7 +231,6 @@ public class Star extends ArtForms
         if(name == "sRight") 
         {
             color1 = ui.frameCount*i%255;
-            // keyMovement();
             i = ui.sRight.indexOf(this);
             s = ui.sRight.get(i);
             rdX = ui.rdRight.x;
@@ -220,10 +245,6 @@ public class Star extends ArtForms
             rdY = height/2;
             rdRadius = ui.rd.radius/3;
             keyMovement();
-            controlBackground();
-            if (ui.checkKey('q')) {
-                System.out.println("q pressed");
-            }
         }
     }
 
