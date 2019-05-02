@@ -36,7 +36,7 @@ public class Star extends ArtForms
 
         aw = ui.aw;
 
-        color1 = 0; color2 = 100; color3 = 250;
+        color1 = 41; color2 = 100; color3 = 255;
     }
 
     public void render()
@@ -61,12 +61,15 @@ public class Star extends ArtForms
     public void update()
     {
         nameCheck();
-        randomMovement();
-        
-        speed =(float) (Math.random() * (40) + 1);
-        // speed = 15;
+        // randomMovement();
+        direction();
 
-        // keep star onscreen
+        // speed =(float) (Math.random() * (40) + 1);
+        speed = 9;
+    }
+    
+    // keep star onscreen
+    public void direction(){
         if (x <= 0 || x >= width)
         {
             dx *= -1;
@@ -99,7 +102,7 @@ public class Star extends ArtForms
     
     public void gotoLine()
     {
-        v2 = new PVector( ((float) (UI.map(i, 0, ui.stars.size(), 0, width))) , (height/2) );
+        v2 = new PVector( ((float) (UI.map(i, 0, ui.stars.size(), 0, width/2))) , (height/2) );
         v1 = new PVector(x, y);
         v2.sub(v1);
         x += v2.x/speed;
@@ -117,26 +120,26 @@ public class Star extends ArtForms
 
     public void twistLeft()
     {
-        s.x += (float) (Math.cos(i)) *4 *dx;
-        s.y += (float) (Math.sin(i)) *4 *dy;  
+        s.x += (float) (Math.cos(i)) * speed/2 *dx;
+        s.y += (float) (Math.sin(i)) * speed/2 *dy;  
     }
 
     public void  twistRight()
     {
-        s.x -= (float) (Math.cos(i)) *4*dx;
-        s.y -= (float) (Math.sin(i)) *4*dy;
+        s.x -= (float) (Math.cos(i)) * speed/2 *dx;
+        s.y -= (float) (Math.sin(i)) * speed/2 *dy;
     }
 
     public void maxIn()
     {
-        s.x -= (float) (( Math.cos(i*width)*8) %Math.cos(width)) *8 *dx;
-        s.y -= (float) (( Math.sin(i*height)*8) %Math.sin(height)) *8 *dy;
+        s.x -= (float) (( Math.cos(i*width)*8) %Math.cos(width)) * speed/2 *dx;
+        s.y -= (float) (( Math.sin(i*height)*8) %Math.sin(height)) * speed/2 *dy;
     }
 
     public void maxOut()
     {
-        s.x += (float) (( Math.cos(i*width)*8) *dx );//%Math.cos(width);
-        s.y += (float) (( Math.sin(i*height)*8) *dy);//Math.sin(height);
+        s.x += (float) (( Math.cos(i*width)* speed/2 ) *dx );//%Math.cos(width);
+        s.y += (float) (( Math.sin(i*height)* speed/2 ) *dy);//Math.sin(height);
     }
 
     public void gotoCircleInverse()
@@ -161,22 +164,13 @@ public class Star extends ArtForms
 
         color1 = UI.map(circle, sz, sz + gap, 100, 255);
         r = UI.map(circle,sz,sz+gap,150,225);
-        color2 = r; color3 = r;
         v2.sub(v1);
         x += v2.x/speed;  
         y += v2.y/speed;
     }
 
-    private int scl = 0;
-    // private boolean busy = false;
 
-    public void controlBackground(int m){
-        // take care of color
-        if (aw.getFrequencyBands(0))
-            scl = (scl + 1 )%200;
-
-        color1 = (float) UI.map(scl + 25 * Math.sin(UI.second() * 5* i), 0, 255, 255, 0);
-
+    public void controlBackground(int m){        
         // take care of movement
         switch (m) {
             case 1:
@@ -200,24 +194,33 @@ public class Star extends ArtForms
                 break;
 
             case 6:
-                gotoCircle();
+                gotoLine();
+                for (int i = 0; i < 11; i++) {
+                    twistLeft();
+                }
                 break;
 
             default:
+                clover();
                 break;
         }
+        direction();
     }
 
     public void nameCheck()
     {
         if(name == "stars") 
         {
-            color1 = ui.frameCount*i%255;
+            if (aw.beat.isOnset()){
+                float con = aw.bandAverages[0];
+                color1 = (float) ( (con * Math.tan(i)) * (con * Math.cos(i)) * (con * Math.sin(i)) ) % 255 ;
+            }
             i = ui.stars.indexOf(this);
             s = ui.stars.get(i);
             rdX = ui.rd.x;
             rdY = ui.rd.y;
             rdRadius = ui.rd.radius;
+            randomMovement();
         }
         if(name == "sLeft") 
         {
@@ -227,6 +230,7 @@ public class Star extends ArtForms
             rdX = ui.rdLeft.x;
             rdY = ui.rdLeft.y;
             rdRadius = ui.rdLeft.radius;
+            randomMovement();
         }
         if(name == "sRight") 
         {
@@ -236,15 +240,23 @@ public class Star extends ArtForms
             rdX = ui.rdRight.x;
             rdY = ui.rdRight.y;
             rdRadius = ui.rdRight.radius;
+            randomMovement();
         }
         if(name == " ")
         {
+            speed = 5;
+            color1 = 255 * (float) (Math.sin(i) * Math.cos(i) * Math.tan(i)) % 255;
+            color2 = 200;
+            color3 = 120;
             i = ui.sBackground.indexOf(this);
             s = ui.sBackground.get(i);
             rdX = width/2;
             rdY = height/2;
             rdRadius = ui.rd.radius/3;
             keyMovement();
+            if ( ((int)ui.random(0, 2)+1) == 1) {
+                randomMovement();
+            }
         }
     }
 

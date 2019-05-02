@@ -21,9 +21,7 @@ public class AudioWave
     public static final int SAMPLE_RATE = 44100;
     public static final int BITS_PER_SAMPLE = 16;
     private float rdDiameter;
-    public float[] bands;
-    private float[] lerpedBands;
-    public float[] bandAverages;
+    public float[] bands, lerpedBands, bandAverages;
 
 	public AudioWave(UI ui)
     {
@@ -124,6 +122,10 @@ public class AudioWave
             {
                 Star s = ui.stars.get(i);
                 s.update();
+                // if(i%2==1) s.maxIn();
+                // if(i%2==0) s.maxOut();
+                if(i%2==1) s.twistRight();
+                if(i%2==0) s.twistLeft();
                 s.maxOut();
             }
         }
@@ -148,8 +150,8 @@ public class AudioWave
         }
     }
 
-    private int temp = 2;
-    private int count = temp;
+    private int bar = 2;
+    private int count = bar;
     private int mov = 0;
     private float time;
     private boolean gate = false;
@@ -161,12 +163,7 @@ public class AudioWave
 
         if (ui.tmp.isFinished()) {
             if ( count > 0 ){
-                for (Star s : ui.sBackground) {
-                    s.controlBackground(mov);
-                    s.render();
-                    s.update();
-                }
-
+                
                 if ( ui.millis() >= (int)(time + (ui.tmp.average *4)) ){ // checks if a tempo beat happens
                     // System.out.println("yeah>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
                     count--;
@@ -177,15 +174,18 @@ public class AudioWave
                     gate = true;
                 }
             }
-            if (count == 0) {
-                count = temp;
+
+            if (count == 0 && beat.isOnset()) {
+                count = bar;
                 mov = (int) ui.random(0, 7);
-                if (mov == 1) count = 4;
                 // System.out.println(mov);
             }
-
             
-
+            for (Star s : ui.sBackground) {
+                s.update();
+                s.render();
+                s.controlBackground(mov);
+            }
         }
     }
 

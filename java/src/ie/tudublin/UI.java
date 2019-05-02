@@ -63,7 +63,7 @@ public class UI extends PApplet
         // initialise arraylists
         for (int i = 0; i < lots*2; i++) {
             if (i<lots/2) {
-                stars.add(new Star(this, DUnit, "stars"));
+                stars.add(new Star(this, (DUnit/3) * 2, "stars"));
             }
             if (i>lots/2 && i < lots/2+lots/4) {
                 sLeft.add(new Star(this, DUnit/2, "sLeft"));
@@ -72,7 +72,7 @@ public class UI extends PApplet
                 sRight.add(new Star(this, DUnit/2, "sRight"));
             }
             if (i>lots && i<lots*2) {
-                sBackground.add(new Star(this, DUnit/3, " "));
+                sBackground.add(new Star(this, DUnit/4, " "));
             }
         }
     }
